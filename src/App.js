@@ -6,13 +6,12 @@ import Router from './config/router';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header"> */}
       
-<h1>Firebase-Authentication</h1>
 
 <Router/>
 
-      </header>
+      {/* </header> */}
     </div>
   );
 }

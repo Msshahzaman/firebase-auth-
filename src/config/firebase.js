@@ -1,14 +1,9 @@
-// import { initializeApp } from "firebase/app";
-// import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
+
 
 import { initializeApp } from "firebase/app";
 import { getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword   } from "firebase/auth";
-
-
-
-
-
-
+import { getFirestore,collection, addDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -24,55 +19,119 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
+const db = getFirestore(app);
 
 
 
-export function register(userinfo){
-const {email,password} = userinfo
+
+export async function register(userinfo){
 
 
 
-createUserWithEmailAndPassword(auth, email, password)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    // ...
-    alert("register success")
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    // ..
-    alert(errorMessage)
+  try{
+    const {email,password,age,fname} = userinfo
 
-  });
+    await createUserWithEmailAndPassword(auth, email, password)
+    await addDoc(collection(db,"firebaseolx"), {
+        fname,
+        age,
+        email,
+      });
+    
+alert('succes register')
 
 
-}
+  } catch(e){
 
+alert(e.message)
+  }
+//   .then((userCredential) => {
+//     // Signed up 
+//     const user = userCredential.user;
+//     // ...
+//     alert("register success")
+//   })
+//   .catch((error) => {
+//     const errorCode = error.code;
+//     const errorMessage = error.message;
+//     // ..
+//     alert(errorMessage)
 
-export function login(userinfo){
-const {email,password} = userinfo
-
-
-signInWithEmailAndPassword(auth, email, password)
-.then((userCredential) => {
-  // Signed in 
-  const user = userCredential.user;
-  // ...
-  alert("login success")
-
-})
-.catch((error) => {
-  const errorCode = error.code;
-  const errorMessage = error.message;
-
-  alert(errorMessage)
-
-});
+//   });
 
 
 }
+
+
+export async function login(userinfo){
+
+    try{
+        const {email,password} = userinfo
+
+      await  signInWithEmailAndPassword(auth, email, password)
+      alert("login succes")
+return true;
+        
+    }catch(e){
+        alert(e.message)
+        throw e;
+    }
+
+}
+
+// .then((userCredential) => {
+//   // Signed in 
+//   const user = userCredential.user;
+//   // ...
+//   alert("login success")
+
+// })
+// .catch((error) => {
+//   const errorCode = error.code;
+//   const errorMessage = error.message;
+
+//   alert(errorMessage)
+
+export async function sellitem(userinfo){
+
+
+
+    try{
+      const {tital,desc,price} = userinfo
+  
+    //   await createUserWithEmailAndPassword(auth, email, password)
+      await addDoc(collection(db,"firebaseolx"), {
+          tital,
+          desc,
+          price,
+        });
+      
+  alert('add succesfuly psred')
+  
+  
+    } catch(e){
+  
+  alert(e.message)
+    }
+  //   .then((userCredential) => {
+  //     // Signed up 
+  //     const user = userCredential.user;
+  //     // ...
+  //     alert("register success")
+  //   })
+  //   .catch((error) => {
+  //     const errorCode = error.code;
+  //     const errorMessage = error.message;
+  //     // ..
+  //     alert(errorMessage)
+  
+  //   });
+  
+  
+  }
+
+
+
 
 
 
